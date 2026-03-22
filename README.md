@@ -1,26 +1,30 @@
-# Resume-screening
-Resume screening is the process of determining whether a candidate is qualified for a role based his or her education, experience, and other information captured on their resume. In a nutshell, it's a form of pattern matching between a job's requirements and the qualifications of a candidate based on their resume
+# AI Resume Screening System
 
-# How to Run
+This project is an AI-powered Resume Screening System that automatically evaluates candidate resumes against job descriptions using Natural Language Processing (NLP) techniques.
 
-```
-<!-- Backend  -->
-cd backend
-npm install
-npm start
+## Features
 
-<!-- Frontend  -->
-cd web
-npm install
-ng s -o
+- Resume parsing using NLP
+- Skill extraction from resumes
+- Semantic similarity matching
+- Ranking candidates based on job requirements
+- Web-based dashboard interface
 
-<!-- NLP  -->
-cd nlp
-pip3 install -r requirements.txt
-python3 app.py
+## Tech Stack
 
-<!-- Vector -->
-cd clustering
-python3 vector.py
-```
-### Note: Download the model from https://tfhub.dev/google/universal-sentence-encoder/2 and store in /nlp/clustering/2/
+- Python (NLP processing)
+- Node.js (Backend)
+- Angular (Frontend)
+- Machine Learning (TF-IDF / similarity scoring)
+
+## Project Structure
+
+backend/ – API services  
+web/ – Frontend interface  
+nlp/ – Resume parsing & similarity engine  
+
+## Future Improvements
+
+- Transformer-based embeddings (BERT / SBERT)
+- Real-time resume ranking API
+- Deployment using Docker / AWS
