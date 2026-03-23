@@ -1,44 +1,51 @@
 import pymongo
 import pandas as pd
 import json
+import os
 
-url  =  "mongodb+srv://M44:admin123@cluster0-nfbuw.mongodb.net/test?retryWrites=true&w=majority"
+# Load MongoDB URL from environment variable instead of hardcoding
+def getURL():
+    return os.getenv("MONGO_URI")
+
 
 def serializeJSON(json_data):
     result = {}
 
     for key in list(json_data.keys()):
-        if type(json_data[key]) == type([]):
-           result[key] = "$".join(json_data[key])
+        if isinstance(json_data[key], list):
+            result[key] = "$".join(json_data[key])
         else:
-          result[key] = str(json_data[key])
+            result[key] = str(json_data[key])
 
     return result
 
-def getURL():
-    df = pd.read_json('/content/env.json',  typ='series')
-    return df['mongodbUrl']
 
 def connect():
+    url = getURL()
+    if url is None:
+        raise ValueError("MongoDB URI not found. Set MONGO_URI environment variable.")
+        
     myclient = pymongo.MongoClient(url)
     mydb = myclient["resume"]
     return mydb
 
+
 def insertOne(mydb, data):
     mycol = mydb["resume"]
+
     data = serializeJSON(data)
-    data = json.dumps(data)
-    data = json.loads(data)
-    print(type(data))
-    print(data)
-    x = mycol.insert_many(data)
-    return x
+
+    # insert_many expects list of documents
+    if isinstance(data, dict):
+        data = [data]
+
+    result = mycol.insert_many(data)
+    return result
+
 
 def getAll(mycol):
-    result = mycol.find()
-    return result
+    return mycol.find()
+
 
 def getbyAtt(mycol, key, value):
-    result = mycol.find({key: value})
-    return result
-
+    return mycol.find({key: value})
